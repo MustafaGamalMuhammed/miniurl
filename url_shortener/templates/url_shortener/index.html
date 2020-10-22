@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 25px;
+        }
+
+        body {
+            background-color: white;
+        }
+
+        main {
+            max-width: 700px;
+            height: 300px;
+            margin: 150px auto;
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid black;
+        }
+
+        .input {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .url {
+            width:400px;
+            height: 40px;
+            margin: 0;
+            padding: 5px;
+            border: 2px solid black;
+            -webkit-box-shadow: -30px 5px 5px 0px rgba(0,0,0,0.06);
+            -moz-box-shadow: -30px 5px 5px 0px rgba(0,0,0,0.06);
+            box-shadow: -30px 5px 5px 0px rgba(0,0,0,0.06);
+        }
+
+        .shorten {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+            width: 120px;
+            height: 40px;
+            margin: 0;
+            padding: 5px;
+            border: 2px solid black;
+            font-weight: 500;
+        }
+
+        .shorten:hover {
+            cursor: pointer;
+        }
+
+        #copy {
+            background-color: brown;
+            border: 1px solid brown;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/d802937c24.js" crossorigin="anonymous"></script>
+    
+</head>
+<body>
+    
+    <main>
+        <div class="input">
+            <input type="text" id="url" class="url" maxlength="700" placeholder="url...">
+            <span id="shorten" class="shorten" onclick="shortenURL()">shorten</span>
+        </div>
+        <div class="input">
+            <input type="text" id="short" class="url" maxlength="700">
+            <span id="copy" class="shorten" onclick="copyURL()"><i class="far fa-copy"></i></span>
+        </div>
+    </main>
+
+    <script>
+        axios.defaults.headers["X-CSRFToken"] = Cookies.get('csrftoken');
+
+        const url = document.querySelector("#url");
+        const shorten = document.querySelector("#shorten");
+        const short = document.querySelector("#short");
+
+        url.focus();
+
+        url.onkeyup = function checkKeyCode(e) {
+            if(e.keyCode == 13) {
+                shorten.click();
+            }
+        }
+
+        function shortenURL() {
+            axios.post('http://127.0.0.1:8000/shorten_url/', {url: url.value})
+            .then(res => res.data)
+            .then(data => {
+                short.value = `http://127.0.0.1:8000/${data.key}/`;
+            })
+            .catch(err => console.log(err))
+        }
+
+        function copyURL() {
+            var copyText = document.getElementById("short");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+
+            document.execCommand("copy");
+        } 
+    </script>
+</body>
+</html>
