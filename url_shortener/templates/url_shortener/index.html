@@ -68,6 +68,7 @@
         }
     </style>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/d802937c24.js" crossorigin="anonymous"></script>
@@ -90,8 +91,6 @@
         axios.defaults.headers["X-CSRFToken"] = Cookies.get('csrftoken');
 
         const url = document.querySelector("#url");
-        const shorten = document.querySelector("#shorten");
-        const short = document.querySelector("#short");
 
         url.focus();
 
@@ -102,10 +101,10 @@
         }
 
         function shortenURL() {
-            axios.post('http://127.0.0.1:8000/shorten_url/', {url: url.value})
+            axios.post('http://127.0.0.1:8000/shorten_url/', {'url': document.querySelector("#url").value})
             .then(res => res.data)
             .then(data => {
-                short.value = `http://127.0.0.1:8000/${data.key}/`;
+                document.querySelector("#short").value = `http://127.0.0.1:8000/${data.key}/`;
             })
             .catch(err => console.log(err))
         }
