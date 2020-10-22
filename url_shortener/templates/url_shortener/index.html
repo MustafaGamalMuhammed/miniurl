@@ -75,6 +75,7 @@
 <body>
     
     <main>
+        <h1>miniurl</h1>
         <div class="input">
             <div id="token">
                 {% csrf_token %}
@@ -114,7 +115,7 @@
             axios.post('https://miniurltech.herokuapp.com/shorten_url/', {'url': document.querySelector("#url").value})
             .then(res => res.data)
             .then(data => {
-                document.querySelector("#short").value = `https://miniurltech.herokuapp.com/${data.key}/`;
+                document.querySelector("#short").value = `${document.location.host}/${data.key}/`;
                 copyURL();
             })
             .catch(err => console.log(err))
