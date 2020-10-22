@@ -68,7 +68,6 @@
         }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js" integrity="sha512-Meww2sXqNHxI1+5Dyh/9KAtvI9RZSA4c1K2k5iL02oiPO/RH3Q30L3M1albtqMg50u4gRTYdV4EXOQqXEI336A==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/d802937c24.js" crossorigin="anonymous"></script>
     
@@ -77,6 +76,9 @@
     
     <main>
         <div class="input">
+            <div id="token">
+                {% csrf_token %}
+            </div>
             <input type="text" id="url" class="url" maxlength="700" placeholder="url...">
             <span id="shorten" class="shorten" onclick="shortenURL()">shorten</span>
         </div>
@@ -87,7 +89,8 @@
     </main>
 
     <script>
-        axios.defaults.headers["X-CSRFToken"] = Cookies.get('csrftoken');
+        const token = document.getElementById("token").getElementsByTagName('input')[0].value;
+        axios.defaults.headers["X-CSRFToken"] = token;
 
         const url = document.querySelector("#url");
 
