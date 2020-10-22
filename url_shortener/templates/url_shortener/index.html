@@ -100,10 +100,10 @@
         }
 
         function shortenURL() {
-            axios.post('http://127.0.0.1:8000/shorten_url/', {'url': document.querySelector("#url").value})
+            axios.post('https://miniurltech.herokuapp.com/shorten_url/', {'url': document.querySelector("#url").value})
             .then(res => res.data)
             .then(data => {
-                document.querySelector("#short").value = `http://127.0.0.1:8000/${data.key}/`;
+                document.querySelector("#short").value = `https://miniurltech.herokuapp.com/${data.key}/`;
             })
             .catch(err => console.log(err))
         }
