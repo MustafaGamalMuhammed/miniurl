@@ -96,6 +96,14 @@
 
         url.focus();
 
+        function copyURL() {
+            var copyText = document.getElementById("short");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+
+            document.execCommand("copy");
+        }
+
         url.onkeyup = function checkKeyCode(e) {
             if(e.keyCode == 13) {
                 shorten.click();
@@ -107,16 +115,9 @@
             .then(res => res.data)
             .then(data => {
                 document.querySelector("#short").value = `https://miniurltech.herokuapp.com/${data.key}/`;
+                copyURL();
             })
             .catch(err => console.log(err))
-        }
-
-        function copyURL() {
-            var copyText = document.getElementById("short");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-
-            document.execCommand("copy");
         } 
     </script>
 </body>
