@@ -12,17 +12,15 @@ def index(request):
 
 
 def create_key():
-    _x = list(range(0, 10)) + [c for c in 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz']
-    _x = [str(item) for item in _x]
-    random.shuffle(_x)
-    key = ''.join(_x[:7])
+    l = [str(n) for n in range(0, 10)] + [c for c in 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz']
+    random.shuffle(l)
+    key = ''.join(l[:7])
     return key
 
 
 @require_POST
 def shorten_url(request):
     data = json.loads(request.body.decode('utf-8'))
-    print(data)
     url  = data['url']
 
     try:
@@ -36,5 +34,8 @@ def shorten_url(request):
 @require_GET
 def get_url(request, key):
     short = get_object_or_404(ShorteneddURL, key=key)
+    url = short.url
 
-    return redirect(short.url)
+    if not url.startswith('http'):
+        return redirect('http://'+url)
+    return redirect(url)

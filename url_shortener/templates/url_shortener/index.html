@@ -116,7 +116,7 @@
         }
 
         function shortenURL() {
-            axios.post('https://miniurltech.herokuapp.com/shorten_url/', {'url': document.querySelector("#url").value})
+            axios.post(`/shorten_url/`, {'url': document.querySelector("#url").value})
             .then(res => res.data)
             .then(data => {
                 document.querySelector("#short").value = `${document.location.host}/${data.key}/`;

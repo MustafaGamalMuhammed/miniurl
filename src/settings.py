@@ -26,11 +26,12 @@ with open(BASE_DIR/'secret_key.txt') as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    'miniurltech.herokuapp.com',
-    'www.miniurl.tech',
-    'miniurl.tech',
-]
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = [
+        'miniurltech.herokuapp.com',
+    ]
 
 
 # Application definition
