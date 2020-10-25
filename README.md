@@ -20,7 +20,6 @@ pip install -r requirements.txt
 To start the application run the following commands
 
 ```bash
-cd src
 python manage.py runserver
 ```
 
