@@ -1,3 +1,4 @@
+from url_shortener.forms import ShorteneddURLForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET, require_POST
 from django.http.response import JsonResponse
@@ -12,7 +13,8 @@ def index(request):
 
 
 def create_key():
-    l = [str(n) for n in range(0, 10)] + [c for c in 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz']
+    l = [str(n) for n in range(0, 10)] + \
+        [c for c in 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz']
     random.shuffle(l)
     key = ''.join(l[:7])
     return key
@@ -26,9 +28,13 @@ def shorten_url(request):
     try:
         short = ShorteneddURL.objects.get(url=url)
     except ShorteneddURL.DoesNotExist:
-        short = ShorteneddURL.objects.create(url=url, key=create_key())
+        form = ShorteneddURLForm(request.POST)
+        if form.is_valid():
+            short = form.save()
+            return JsonResponse({'key': short.key}, status=status.HTTP_201_CREATED)
+        else:
+            return JsonResponse(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    return JsonResponse({'key': short.key}, status=status.HTTP_201_CREATED)
 
 
 @require_GET
@@ -36,6 +42,4 @@ def get_url(request, key):
     short = get_object_or_404(ShorteneddURL, key=key)
     url = short.url
 
-    if not url.startswith('http'):
-        return redirect('http://'+url)
     return redirect(url)

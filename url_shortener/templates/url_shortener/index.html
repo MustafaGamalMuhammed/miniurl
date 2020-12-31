@@ -66,6 +66,10 @@
             cursor: pointer;
         }
 
+        #error {
+            color: red;
+        }
+
         #copy {
             background-color: brown;
             border: 1px solid brown;
@@ -84,9 +88,10 @@
             <div id="token">
                 {% csrf_token %}
             </div>
-            <input type="text" id="url" class="url" maxlength="700" placeholder="url...">
+            <input type="url" id="url" class="url" maxlength="200" placeholder="url...">
             <span id="shorten" class="shorten" onclick="shortenURL()">shorten</span>
         </div>
+        <p id="error"></p>
         <div class="input">
             <input type="text" id="short" class="url" maxlength="700">
             <span id="copy" class="shorten" onclick="copyURL()"><i class="far fa-copy"></i></span>
@@ -115,14 +120,21 @@
             }
         }
 
+        function setErrorMsg(msg) {
+            document.getElementById("error").innerText = msg;
+        }
+
         function shortenURL() {
             axios.post(`/shorten_url/`, {'url': document.querySelector("#url").value})
             .then(res => res.data)
             .then(data => {
                 document.querySelector("#short").value = `${document.location.host}/${data.key}/`;
                 copyURL();
+                setErrorMsg("");
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                setErrorMsg("Please enter a correct url.");
+            })
         } 
     </script>
 </body>
